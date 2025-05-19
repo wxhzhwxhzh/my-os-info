@@ -1,0 +1,19 @@
+{
+  "name": "my-os-info",
+  "version": "1.0.0",
+  "description": "打印系统的各种信息",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "wb",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "commander": "^14.0.0"
+  },
+  "bin": {
+    "my-os-info": "./index.js"
+  },
+  "type": "module"
+}
