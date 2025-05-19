@@ -4,7 +4,7 @@
   "description": "打印系统的各种信息",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "ceshi": "node index.js"
   },
   "author": "wb",
   "license": "ISC",
