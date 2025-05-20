@@ -20,13 +20,18 @@ function getLocalIP() {
     return null;
 }
 
-// 获取系统信息
+// 获取系统信息，增加内存、主机名、uptime、用户信息
 function getOSInfo() {
     return {
         platform: os.platform(),
         release: os.release(),
         arch: os.arch(),
-        type: os.type()
+        type: os.type(),
+        hostname: os.hostname(),
+        uptime: os.uptime(), // 秒
+        totalmem: os.totalmem(), // 字节
+        freemem: os.freemem(), // 字节
+        userInfo: os.userInfo()
     };
 }
 
@@ -38,6 +43,19 @@ function getCPUInfo() {
         cores: cpus.length,
         speed: cpus[0]?.speed || 0 // MHz
     };
+}
+
+// 内存格式化
+function formatMem(bytes) {
+    return (bytes / 1024 / 1024 / 1024).toFixed(2) + " GB";
+}
+
+// uptime 格式化
+function formatUptime(seconds) {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
+    return `${h}h ${m}m ${s}s`;
 }
 
 program
@@ -81,6 +99,11 @@ if (options.json) {
         }
         if (options.os || (!options.timeOnly && !options.ipOnly)) {
             console.log(`${chalk.yellow("💻 操作系统：")} ${chalk.white(`${osInfo.type} ${osInfo.platform} ${osInfo.release} ${osInfo.arch}`)}`);
+            console.log(`${chalk.magenta("🖥️ 主机名：")} ${chalk.white(osInfo.hostname)}`);
+            console.log(`${chalk.magenta("⏳ 运行时长：")} ${chalk.white(formatUptime(osInfo.uptime))}`);
+            console.log(`${chalk.magenta("💾 总内存：")} ${chalk.white(formatMem(osInfo.totalmem))}`);
+            console.log(`${chalk.magenta("💾 可用内存：")} ${chalk.white(formatMem(osInfo.freemem))}`);
+            console.log(`${chalk.magenta("👤 当前用户：")} ${chalk.white(osInfo.userInfo.username)}`);
         }
         if (options.cpu || (!options.timeOnly && !options.ipOnly)) {
             console.log(`${chalk.cyan("🧠 CPU：")} ${chalk.white(`${cpuInfo.model} (${cpuInfo.cores} 核心, ${cpuInfo.speed} MHz)`)}`);
